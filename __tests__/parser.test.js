@@ -117,6 +117,10 @@ describe('Parser Tests', () => {
       expect(() => parse("* 5")).toThrow();
       expect(() => parse("3 4")).toThrow(); // Missing operator
     });
+
+    test('should handle unknown characters', () => {
+      expect(() => parse("123**45+@")).toThrow();
+    });
   });
 
   describe('Regression tests', () => {
