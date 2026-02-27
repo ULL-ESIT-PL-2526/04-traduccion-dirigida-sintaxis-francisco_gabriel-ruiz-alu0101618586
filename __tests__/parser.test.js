@@ -194,6 +194,10 @@ describe('Parser Tests', () => {
     test('should handle large positive exponents', () => {
       expect(parse("1.2e+5")).toBe(120000);
     });
+
+    test('should throw with invalid floating point numbers', () => {
+      expect(() => parse(".3e+")).toThrow();
+    })
   });
 
 });
