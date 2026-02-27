@@ -1,9 +1,13 @@
 /* Lexer */
 %lex
+entero \d+
+mantisa \.[0-9]+
+exponente [eE][-+]?[0-9]+
 %%
 \s+                                     { /* skip whitespace */; }
+(\/\*)(.|\n)*?(\*\/)                    { /* skip multiple line comment */; }
 "//"[^\n]*                              { /* skip one line comment */; }
-[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?     { return 'NUMBER'; }
+{entero}{mantisa}?{exponente}?          { return 'NUMBER'; }
 "**"                                    { return 'OP';           }
 [-+*/]                                  { return 'OP';           }
 <<EOF>>                                 { return 'EOF';          }
