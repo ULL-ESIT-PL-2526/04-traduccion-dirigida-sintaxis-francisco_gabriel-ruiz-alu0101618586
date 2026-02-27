@@ -2,6 +2,7 @@
 %lex
 %%
 \s+                   { /* skip whitespace */; }
+"//"[^\n]*            { /* skip one line comment */; }
 [0-9]+                { return 'NUMBER';       }
 "**"                  { return 'OP';           }
 [-+*/]                { return 'OP';           }
