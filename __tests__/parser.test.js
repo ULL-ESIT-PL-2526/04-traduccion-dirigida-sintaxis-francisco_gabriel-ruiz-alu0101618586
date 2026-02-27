@@ -110,7 +110,6 @@ describe('Parser Tests', () => {
       expect(() => parse("3 +")).toThrow();
       expect(() => parse("+ 3")).toThrow();
       expect(() => parse("3 + + 4")).toThrow();
-      expect(() => parse("3.5")).toThrow(); // Only integers are supported
     });
 
     test('should handle incomplete expressions', () => {
@@ -125,6 +124,75 @@ describe('Parser Tests', () => {
       expect(parse("1 - 2")).toBe(-1);
       expect(parse("10 - 4 - 3")).toBe(3);
       expect(parse("7 - 5 - 1")).toBe(1);
+    });
+  });
+
+  describe("Comments tests", () => {
+    test('should ignore everything after //', () => {
+      expect(parse("5 + 5 // This should not count")).toBe(10);
+    });
+
+    test('should not ignore elements after newline', () => {
+      expect(parse("// Ignore me\n5 * 5")).toBe(25);
+    });
+
+    test('should allow comments on their own lines', () => {
+      const input = `
+        // Initial comment
+        10 * 2
+        // Final comment
+      `;
+      expect(parse(input.trim())).toBe(20);
+    });
+
+    test('should handle comments without spaces around operators', () => {
+      expect(parse("10+10//comment")).toBe(20);
+    });
+
+    test('should handle empty comments', () => {
+      expect(parse("5*5 //")).toBe(25);
+    });
+
+    test('should distinguish between division and comment', () => {
+      expect(parse("20 / 2 // 10")).toBe(10);
+    });
+
+    test('should throw error on only comment input', () => {
+      expect(() => parse("//")).toThrow();
+    });
+  });
+
+  describe('Floating-point number parsing', () => {
+    test('should parse simple decimal numbers', () => {
+      expect(parse("2.35")).toBe(2.35);
+      expect(parse("0.123")).toBe(0.123);
+    });
+
+    test('should parse numbers with positive exponents', () => {
+      expect(parse("2e3")).toBe(2000);
+      expect(parse("1.5E+2")).toBe(150);
+    });
+
+    test('should parse numbers with negative exponents', () => {
+      expect(parse("2.35e-3")).toBe(0.00235);
+      expect(parse("100E-2")).toBe(1);
+    });
+
+    test('should parse complex expressions with floating point', () => {
+      expect(parse("2.5 * 2 + 1e-1")).toBe(5.1);
+      expect(parse("10 / 2.5")).toBe(4);
+    });
+
+    test('should handle exponents with multiple digits', () => {
+      expect(parse("1e10")).toBe(10000000000);
+    });
+
+    test('should handle numbers starting with zero', () => {
+      expect(parse("0.0001")).toBe(0.0001);
+    });
+
+    test('should handle large positive exponents', () => {
+      expect(parse("1.2e+5")).toBe(120000);
     });
   });
 
