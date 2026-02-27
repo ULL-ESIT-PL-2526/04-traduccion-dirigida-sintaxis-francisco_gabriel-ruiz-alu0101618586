@@ -38,7 +38,7 @@ La metodología empleada se basa en el ciclo de vida del desarrollo definido en 
 1.  **Gestión por Incidencias:** Se ha convertido cada ejercicio de la práctica en una *issue* de GitHub, utilizando el número del ejercicio como título y lo solicitado como descripción.
 2. **Uso de ramas `dev` y `doc`:** El desarrollo técnico se ha realizado en una rama de desarrollo separada (`dev`), mientras que la documentación se ha gestionado en la rama `doc`.
 3. **Generación de código:** Se ha utilizado el generador **Jison** para transformar la especificación gramatical (`.jison`) en código JavaScript ejecutable (`parser.js`).
-4. **Pruebas Unitarias (TDD):** Se ha empleado **Jest** para verificar que cada cambio en la gramática o en el lexer no introdujera regresiones y que los nuevos requisitos (punto flotante y comentarios) funcionaran según lo esperado.
+4. **Pruebas con Jest:** Se ha empleado **Jest** para verificar que cada cambio en la gramática o en el lexer no introdujera regresiones y que los nuevos requisitos (punto flotante y comentarios) funcionaran según lo esperado.
 
 ## Desarrollo
 
@@ -113,3 +113,17 @@ Se devuelve el token `EOF` cuando el analizador léxico llegue al final del fich
 Esta regla es importantísima puesto que permite identificar caracteres no válidos. Recordemos que, en expresiones regulares, `.` representa a un caracter cualquiera. Al introducir esta regla al final, nos aseguramos de que el analizador léxico haya intentado emparejar al caracter actualmente siendo leído con cualquier otro token mediante los patrones definidos. Si se diera el caso de que ninguno coincide, este último patrón nos permite crear un token `INVALID`, entregárselo al parser y poder señalarle que se ha leído un caracter no válido.
 
 En este caso, un caracter no válido podría ser una palabra, tal que `a`.
+
+## Resultados
+
+La realización de esta práctica ha permitido validar el funcionamiento de un sistema de traducción dirigido por la sintaxis mediante **Jison**, alcanzando los siguientes hitos:
+
+* **Implementación de la Calculadora:** Se ha logrado un procesador funcional que no solo reconoce la sintaxis, sino que ejecuta cálculos aritméticos en tiempo real mediante una **SDD (Definición Dirigida por Sintaxis)**.
+* **Extensión del Léxico:**
+  * **Comentarios:** Se implementó la regla `"//"[^\n]*` para ignorar anotaciones de una sola línea, permitiendo documentar la entrada sin afectar el cálculo.
+  * **Punto Flotante:** Se expandió el reconocimiento de números con la regex `[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?`, dando soporte a decimales y notación científica (ej. `2.35e-3`).
+* **Robustez mediante Pruebas (Jest):**
+  * Se superaron **31 tests** que cubren desde operaciones básicas hasta casos de borde (*edge cases*).
+  * Se verificó que el lexer se recupera correctamente tras un comentario mediante el uso de saltos de línea (`\n`).
+  * Se validó la jerarquía de operadores, asegurando que `**` tiene prioridad sobre los caracteres individuales `*`.
+  * Se validó el uso correcto de números en punto flotante.
