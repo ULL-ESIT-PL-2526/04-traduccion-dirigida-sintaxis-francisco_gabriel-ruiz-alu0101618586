@@ -11,13 +11,15 @@ exponente [eE][-+]?[0-9]+
 "**"                                    { return 'OPOW';                    }
 [*/]                                    { return 'OPMU';                    }
 [-+]                                    { return 'OPAD';                    }
+\(                                      { return 'OPENPARENTHESIS';         }
+\)                                      { return 'CLOSEPARENTHESIS';        }
 <<EOF>>                                 { return 'EOF';                     }
 .                                       { return 'INVALID';                 }
 /lex
 
 /* Parser */
 %start expressions
-%token NUMBER OPAD OPMU OPOW
+%token NUMBER OPAD OPMU OPOW OPENPARENTHESIS CLOSEPARENTHESIS
 %%
 
 expressions
@@ -43,11 +45,14 @@ root
     : factor OPOW root
         { $$ = operate($OPOW, $factor, $root); }
     | factor
+        { $$ = $factor; }
     ;
 
 factor
     : NUMBER
         { $$ = Number(yytext); }
+    | OPENPARENTHESIS expression CLOSEPARENTHESIS
+        { $$ = $expression; }
     ;
 %%
 
