@@ -80,4 +80,27 @@ describe('Parser Precedence and Associativity Tests', () => {
       expect(parse("0.5 * 10.0 + 0.2 * 50.0")).toBeCloseTo(15.0); // (0.5 * 10.0) + (0.2 * 50.0) = 15.0
     });
   });
+
+  describe('Parentheses Operations', () => {
+    test('should handle basic parentheses to override precedence', () => {
+      expect(parse("(2 + 3) * 4")).toBe(20);   // (2 + 3) * 4 = 5 * 4 = 20
+      expect(parse("10 / (2 + 3)")).toBe(2);   // 10 / (2 + 3) = 10 / 5 = 2
+      expect(parse("(10 - 2) ** 2")).toBe(64); // (10 - 2) ** 2 = 8 ** 2 = 64
+    });
+
+    test('should handle nested parentheses', () => {
+      expect(parse("2 * (3 + (4 / 2))")).toBe(10);   // 2 * (3 + 2) = 2 * 5 = 10
+      expect(parse("((2 + 3) * 2) ** 2")).toBe(100); // (5 * 2) ** 2 = 10 ** 2 = 100
+    });
+
+    test('should handle complex expressions with parentheses and floats', () => {
+      expect(parse("(1.5 + 0.5) * (2.0 + 3.0)")).toBeCloseTo(10.0); // 2.0 * 5.0 = 10.0
+      expect(parse("2.0 ** (1.0 + 2.0)")).toBeCloseTo(8.0);         // 2.0 ** 3.0 = 8.0
+    });
+
+    test('should handle various realistic calculations with parentheses', () => {
+      expect(parse("100 / (10 + 10) * 2")).toBe(10); // (100 / 20) * 2 = 5 * 2 = 10
+      expect(parse("(5 + 5) ** (1 + 1)")).toBe(100); // 10 ** 2 = 100
+    });
+  });
 });
