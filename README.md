@@ -1,4 +1,4 @@
-# Práctica de laboratorio de PL #2. GitHub y Entornos de Desarrollo
+# Práctica de laboratorio de PL #5. Traducción dirigida por la sintaxis: gramática
 
 Esta es la quinta práctica de la asignatura **Procesadores de Lenguajes** (curso 2025-2026), perteneciente al [Grado en Ingeniería Informática](https://www.ull.es/grados/ingenieria-informatica/) de [La Universidad de La Laguna](https://www.ull.es/).
 
