@@ -102,5 +102,10 @@ describe('Parser Precedence and Associativity Tests', () => {
       expect(parse("100 / (10 + 10) * 2")).toBe(10); // (100 / 20) * 2 = 5 * 2 = 10
       expect(parse("(5 + 5) ** (1 + 1)")).toBe(100); // 10 ** 2 = 100
     });
+
+    test('should throw incorrect parentheses', () => {
+      expect(() => parse("(")).toThrow();
+      expect(() => parse("43)")).toThrow();
+    });
   });
 });
