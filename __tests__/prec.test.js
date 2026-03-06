@@ -108,4 +108,23 @@ describe('Parser Precedence and Associativity Tests', () => {
       expect(() => parse("43)")).toThrow();
     });
   });
+
+  describe('Factorial tests', () => {
+    test('should handle normal factorial', () => {
+      expect(parse("0!")).toBe(1);
+      expect(parse("1!")).toBe(1);
+      expect(parse("2!")).toBe(2);
+      expect(parse("3!")).toBe(6);
+      expect(parse("4!")).toBe(24);
+      expect(parse("5!")).toBe(120);
+    });
+
+    test('should handle normal factorial', () => {
+      expect(parse("(2 * 3)!")).toBe(720);
+    });
+
+    test('should throw on empty factorial', () => {
+      expect(() => parse("!")).toThrow();
+    });
+  });
 });

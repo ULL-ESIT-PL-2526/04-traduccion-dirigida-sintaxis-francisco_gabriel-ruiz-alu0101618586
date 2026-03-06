@@ -9,17 +9,18 @@ exponente [eE][-+]?[0-9]+
 \/\/[^\n]*                              { /* skip one line comment */;      }
 {entero}{mantisa}?{exponente}?          { return 'NUMBER';                  }
 "**"                                    { return 'OPOW';                    }
+"!"                                     { return 'OPFAC';                   }
 [*/]                                    { return 'OPMU';                    }
 [-+]                                    { return 'OPAD';                    }
-\(                                      { return 'OPENPARENTHESIS';         }
-\)                                      { return 'CLOSEPARENTHESIS';        }
+\(                                      { return 'OPENPAR';                 }
+\)                                      { return 'CLOSEPAR';                }
 <<EOF>>                                 { return 'EOF';                     }
 .                                       { return 'INVALID';                 }
 /lex
 
 /* Parser */
 %start expressions
-%token NUMBER OPAD OPMU OPOW OPENPARENTHESIS CLOSEPARENTHESIS
+%token NUMBER OPAD OPMU OPOW OPENPAR CLOSEPAR OPFAC
 %%
 
 expressions
@@ -49,12 +50,32 @@ root
     ;
 
 factor
+    : factor OPFAC
+        { $$ = unaryOperate($OPFAC, $factor); }
+    | primary
+        { $$ = $primary; }
+    ;
+
+primary
     : NUMBER
         { $$ = Number(yytext); }
-    | OPENPARENTHESIS expression CLOSEPARENTHESIS
+    | OPENPAR expression CLOSEPAR
         { $$ = $expression; }
     ;
 %%
+
+function computeFactorial(number) {
+    if (number === 0) {
+        return 1;
+    }
+    return number * computeFactorial(number - 1);
+}
+
+function unaryOperate(op, operand) {
+    switch (op) {
+        case '!': return computeFactorial(operand);
+    }
+}
 
 function operate(op, left, right) {
     switch (op) {
