@@ -1,6 +1,6 @@
 const parse = require("../src/parser.js").parse;
 
-describe('Parser Failing Tests', () => {
+describe('Parser Precedence and Associativity Tests', () => {
   test('should handle multiplication and division before addition and subtraction', () => {
     expect(parse("2 + 3 * 4")).toBe(14); // 2 + (3 * 4) = 14
     expect(parse("10 - 6 / 2")).toBe(7);  // 10 - (6 / 2) = 7
